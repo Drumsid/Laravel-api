@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Desk;
 use App\Http\Resources\DeskResource;
+use App\Http\Requests\DeskRequest;
 
 class DeskController extends Controller
 {
@@ -25,9 +26,10 @@ class DeskController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(DeskRequest $request)
     {
-        //
+        $desk = Desk::create($request->validated());
+        return new DeskResource($desk);
     }
 
     /**
@@ -39,9 +41,6 @@ class DeskController extends Controller
     public function show($id)
     {
         return new DeskResource(Desk::findOrFail($id));
-        // $response = new DeskResource(Desk::findOrFail($id));
-        // return response($response, 200)
-        //         ->header('Content-Type', 'application/json');
     }
 
     /**

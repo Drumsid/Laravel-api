@@ -9,6 +9,11 @@ class Card extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+        'name',
+        'desk_list_id',
+    ];
+
     public function tasks()
     {
         return $this->hasMany(Task::class);

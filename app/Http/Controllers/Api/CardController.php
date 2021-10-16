@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Card;
 use App\Http\Resources\CardResource;
+use App\Http\Requests\CardRequest;
 
 class CardController extends Controller
 {
@@ -25,9 +26,10 @@ class CardController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(CardRequest $request)
     {
-        //
+        $card = Card::create($request->validated());
+        return new CardResource($card);
     }
 
     /**

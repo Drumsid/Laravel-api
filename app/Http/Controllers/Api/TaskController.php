@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Task;
 use App\Http\Resources\TaskResource;
+use App\Http\Requests\TaskRequest;
 
 class TaskController extends Controller
 {
@@ -25,9 +26,10 @@ class TaskController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(TaskRequest $request)
     {
-        //
+        $task = Task::create($request->validated());
+        return new TaskResource($task);
     }
 
     /**

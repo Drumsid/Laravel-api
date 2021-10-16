@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\DeskList;
 use App\Http\Resources\DeskListResource;
+use App\Http\Requests\DeskListRequest;
 
 class DeskListController extends Controller
 {
@@ -25,9 +26,10 @@ class DeskListController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(DeskListRequest $request)
     {
-        //
+        $list = DeskList::create($request->validated());
+        return new DeskListResource($list);
     }
 
     /**
