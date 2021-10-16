@@ -8,4 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 class DeskList extends Model
 {
     use HasFactory;
+
+    public function cards()
+    {
+        return $this->hasMany(Card::class);
+    }
 }
