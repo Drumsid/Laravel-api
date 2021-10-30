@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\Card;
 use App\Http\Resources\CardResource;
 use App\Http\Requests\CardRequest;
+use Illuminate\Http\Response;
 
 class CardController extends Controller
 {
@@ -40,7 +41,11 @@ class CardController extends Controller
      */
     public function show($id)
     {
-        return new CardResource(Card::findOrFail($id));
+        $card = Card::find($id);
+        if ($card) {
+            return new CardResource($card);
+        }
+        return response('No exists!', 404);
     }
 
     /**
@@ -50,9 +55,10 @@ class CardController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(CardRequest $request, Card $card)
     {
-        //
+        $card->update($request->validated());
+        return new CardResource($card);
     }
 
     /**
@@ -61,8 +67,9 @@ class CardController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Card $card)
     {
-        //
+        $card->delete();
+        return response(null, Response::HTTP_NO_CONTENT);
     }
 }

@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\Task;
 use App\Http\Resources\TaskResource;
 use App\Http\Requests\TaskRequest;
+use Illuminate\Http\Response;
 
 class TaskController extends Controller
 {
@@ -40,7 +41,11 @@ class TaskController extends Controller
      */
     public function show($id)
     {
-        return new TaskResource(Task::findOrFail($id));
+        $task = Task::find($id);
+        if ($task) {
+            return new TaskResource($task);
+        }
+        return response('No exists!', 404);
     }
 
     /**
@@ -50,9 +55,10 @@ class TaskController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(TaskRequest $request, Task $task)
     {
-        //
+        $task->update($request->validated());
+        return new TaskResource($task);
     }
 
     /**
@@ -61,8 +67,9 @@ class TaskController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Task $task)
     {
-        //
+        $task->delete();
+        return response(null, Response::HTTP_NO_CONTENT);
     }
 }

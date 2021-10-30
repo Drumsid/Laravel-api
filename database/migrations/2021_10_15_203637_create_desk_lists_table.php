@@ -16,7 +16,8 @@ class CreateDeskListsTable extends Migration
         Schema::create('desk_lists', function (Blueprint $table) {
             $table->id();
             $table->string('name', 100);
-            $table->foreignId('desk_id')->constrained();
+            $table->foreignId('desk_id')->constrained()
+                    ->onUpdate('cascade')->onDelete('cascade');
             $table->timestamps();
         });
     }

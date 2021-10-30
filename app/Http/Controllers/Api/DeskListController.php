@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\DeskList;
 use App\Http\Resources\DeskListResource;
 use App\Http\Requests\DeskListRequest;
+use Illuminate\Http\Response;
 
 class DeskListController extends Controller
 {
@@ -40,7 +41,11 @@ class DeskListController extends Controller
      */
     public function show($id)
     {
-        return new DeskListResource(DeskList::findOrFail($id));
+        $list = DeskList::find($id);
+        if ($list) {
+            return new DeskListResource($list);
+        }
+        return response('No exists!', 404);
     }
 
     /**
@@ -50,9 +55,10 @@ class DeskListController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(DeskListRequest $request, DeskList $list)
     {
-        //
+        $list->update($request->validated());
+        return new DeskListResource($list);
     }
 
     /**
@@ -61,8 +67,9 @@ class DeskListController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(DeskList $list)
     {
-        //
+        $list->delete();
+        return response(null, Response::HTTP_NO_CONTENT);
     }
 }

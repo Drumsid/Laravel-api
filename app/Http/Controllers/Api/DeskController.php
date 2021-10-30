@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\Desk;
 use App\Http\Resources\DeskResource;
 use App\Http\Requests\DeskRequest;
+use Illuminate\Http\Response;
 
 class DeskController extends Controller
 {
@@ -40,7 +41,11 @@ class DeskController extends Controller
      */
     public function show($id)
     {
-        return new DeskResource(Desk::findOrFail($id));
+        $desk = Desk::find($id);
+        if ($desk) {
+            return new DeskResource($desk);
+        }
+        return response('No exists!', 404);
     }
 
     /**
@@ -50,9 +55,10 @@ class DeskController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(DeskRequest $request, Desk $desk)
     {
-        //
+        $desk->update($request->validated());
+        return new DeskResource($desk);
     }
 
     /**
@@ -61,8 +67,9 @@ class DeskController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Desk $desk)
     {
-        //
+        $desk->delete();
+        return response(null, Response::HTTP_NO_CONTENT);
     }
 }
